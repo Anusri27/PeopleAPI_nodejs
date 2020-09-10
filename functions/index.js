@@ -11,8 +11,8 @@ const rl = readline.createInterface({
 const transporting = nodemailer.createTransport({
   service: 'gmail',
   auth: {
-      user: 'anusricoding@gmail.com',
-      pass: 'Akhil2000'
+      user: 'XXXXXXXX@gmail.com',
+      pass: 'CCCCCC'
   }
 });
 
@@ -93,7 +93,7 @@ function getNewToken(oAuth2Client, callback) {
 
 
 function list(auth) {
-  var a= "Anusri Patti"
+  var a= "ABC"
   var name = [];
   var mail = [];
   const service = google.people({version: 'v1', auth});
@@ -126,10 +126,10 @@ function list(auth) {
       }
     }
     const mailOptions = {
-      from: "Qwikcilver", 
+      from: "ABCS", 
       to: x, 
-      subject: "You have recieved a giftcard!", 
-      html: `<p>Hello ! <br> You have recieved. </p>`
+      subject: "HEY", 
+      html: `<p>YEET! </p>`
     }
     
     transporting.sendMail(mailOptions, (err, info) => {
