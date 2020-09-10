@@ -1,9 +1,28 @@
+const nodemailer = require("nodemailer");
+
+
 const fs = require('fs');
 const readline = require('readline');
 const {google} = require('googleapis');
+const rl = readline.createInterface({
+  input: process.stdin,
+  output: process.stdout
+});
+const transporting = nodemailer.createTransport({
+  service: 'gmail',
+  auth: {
+      user: 'anusricoding@gmail.com',
+      pass: 'Akhil2000'
+  }
+});
 
+var x;
 // If modifying these scopes, delete token.json.
-const SCOPES = ['https://www.googleapis.com/auth/contacts.readonly'];
+const SCOPES = [
+  'https://www.googleapis.com/auth/contacts.readonly',
+  'https://www.googleapis.com/auth/userinfo.email',
+  'https://www.googleapis.com/auth/userinfo.profile'
+];
 // The file token.json stores the user's access and refresh tokens, and is
 // created automatically when the authorization flow completes for the first
 // time.
@@ -13,7 +32,7 @@ const TOKEN_PATH = 'token.json';
 fs.readFile('credentials.json', (err, content) => {
   if (err) return console.log('Error loading client secret file:', err);
   // Authorize a client with credentials, then call the Google Tasks API.
-  authorize(JSON.parse(content), listConnectionNames);
+  authorize(JSON.parse(content), list);
 });
 
 /**
@@ -71,7 +90,12 @@ function getNewToken(oAuth2Client, callback) {
  *
  * @param {google.auth.OAuth2} auth An authorized OAuth2 client.
  */
-function listConnectionNames(auth) {
+
+
+function list(auth) {
+  var a= "Anusri Patti"
+  var name = [];
+  var mail = [];
   const service = google.people({version: 'v1', auth});
   service.people.connections.list({
     resourceName: 'people/me',
@@ -83,15 +107,41 @@ function listConnectionNames(auth) {
     if (connections) {
       console.log('Connections:');
       connections.forEach((person) => {
-        if (person.names && person.names.length > 0) {
           console.log(person.names[0].displayName);
-        } else {
-          console.log('No display name found for connection.');
-        }
+          name.push(person.names[0].displayName);
+          console.log(person.emailAddresses[0].value);
+          mail.push(person.emailAddresses[0].value);
       });
+      console.log(name);
+      console.log(mail);
+      var l= name.length;
+      console.log(l);
     } else {
       console.log('No connections found.');
     }
+    for(let k =0 ; k<l;k++){
+      if(a==name[k]){
+        x = mail[k];
+        console.log(x);
+      }
+    }
+    const mailOptions = {
+      from: "Qwikcilver", 
+      to: x, 
+      subject: "You have recieved a giftcard!", 
+      html: `<p>Hello ! <br> You have recieved. </p>`
+    }
+    
+    transporting.sendMail(mailOptions, (err, info) => {
+    if(err) { 
+      console.log(err); 
+    } else { 
+      console.log('Email sent successfully'); 
+    } 
+    })
+    
+    
   });
 }
+
 
